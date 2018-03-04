@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>简单模板引擎</title>
+    <script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+</head>
+<body>
+<input id="name" placeholder="name" type="text" >
+<input id="age" placeholder="age" type="text" onKeyUp="value=value.replace(/[^\d]/g,'') "onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))">
+
+<button class="btn">确定</button>
+
+<script>
+    var $div = $('<div></div>')
+//实现简单的数据替换
+    var template = '<p>Hello, my name is <%name%>. I\'m <%age%> years old.</p> ' //定义模板
+
+
+    $('.btn').click(function () {
+        var $inputName = $('#name').val()
+        var $inputAge = $('#age').val()
+        var data ={
+            name :$inputName ,
+            age:$inputAge
+        }
+        var TemplateEngine = function (tpl,data) {
+            var regex = /<%([^%>]+)?%>/g
+            while(match = regex.exec(tpl)){
+                tpl = tpl.replace(match[0],data[match[1]])
+            }
+            return tpl
+        } //制作模板引擎
+
+        var string = TemplateEngine(template,data) //数据替换
+
+        $div.append(string)
+    })
+
+    $div.append(template)
+    $('body').append($div)
+
+</script>
+</body>
+</html>
